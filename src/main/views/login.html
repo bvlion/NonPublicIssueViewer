@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home Diary Login</title>
+  <link href="/css/login.min.css" rel="stylesheet" type="text/css" media="all"/>
+  <link href="/css/common.min.css" rel="stylesheet" type="text/css" media="all"/>
+  <link rel="icon" href="/images/icon/favicon-256x256.png" sizes="256x256" type="image/png">
+  <link rel="icon" href="/images/icon/favicon.ico">
+</head>
+<body>
+  <div class="header-w3l">
+    <h1>Home Diary</h1>
+  </div>
+  <div class="main-content-agile">
+    <div class="sub-main-w3">
+      <input  placeholder="合言葉" id="passphrase" type="password" required onkeydown="enter()">
+      <img src="/images/eye-con.png" class="eye-con" onclick="showChange()"><br>
+      <input type="button" value="" onclick="login()">
+    </div>
+  </div>
+  <div class="footer">
+    <p>&copy; 2020 bvlion. All rights reserved</p>
+  </div>
+  
+  <div class="loading-overlay"></div>
+  <div class="loading-message">Loading...</div>
+  <div class="loader"></div>
+
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="/js/login.min.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA--2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA--2');
+  </script>
+</body>
+</html>

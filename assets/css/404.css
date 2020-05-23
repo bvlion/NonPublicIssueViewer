@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css?family=Monsieur+La+Doulaise &display=swap');
+html {
+    height: 100%;
+    margin: 0;
+}
+body {
+    background: url('/images/404.jpg');
+    background-size: cover;
+    text-align: center;
+    background-position: 25% 5%;
+    background-repeat: no-repeat;
+    font-family: 'Open Sans', sans-serif;
+}
+.message {
+    margin-top: 245px;
+}
+a {
+    text-decoration: none;
+}
+.message h1 {
+    font-size: 5em;
+    color: #538826;
+    letter-spacing: 6px;
+    font-weight: 400;
+    font-family: 'Monsieur La Doulaise', cursive;
+}
+.footer {
+    padding: 2.3em 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 100;
+}
+.footer p {
+    font-size: 0.9em;
+    color: #ddd;
+    text-shadow: black 0.5px 0.5px 0, black -0.5px 0.5px 0, black 0.5px -0.5px 0, black -0.5px -0.5px 0;
+}

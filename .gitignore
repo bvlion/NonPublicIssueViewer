@@ -1,0 +1,4 @@
+pkg
+src/main/vendor
+assets/node_modules
+src/main/public/images/bg.jpg
