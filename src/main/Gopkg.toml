@@ -25,6 +25,14 @@
 #   unused-packages = true
 
 
+[[constraint]]
+  name = "github.com/labstack/echo"
+  version = "4.1.16"
+
+[[constraint]]
+  name = "gopkg.in/yaml.v2"
+  version = "2.3.0"
+
 [prune]
   go-tests = true
   unused-packages = true

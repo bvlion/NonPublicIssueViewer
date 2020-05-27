@@ -6,11 +6,9 @@ import (
   "io"
   "fmt"
   "github.com/labstack/echo"
-  "github.com/google/go-github/github"
-  "golang.org/x/oauth2"
   "log"
   "os"
-  "context"
+  "main/utils"
 )
 
 type Template struct {
@@ -46,23 +44,7 @@ func main() {
   e.Static("/images", "./public/images")
 
   e.GET("/", func (e echo.Context) error {
-    ts := oauth2.StaticTokenSource(
-      &oauth2.Token{AccessToken: ""},
-    )
-    tc := oauth2.NewClient(oauth2.NoContext, ts)
-    
-    client := github.NewClient(tc)
-
-    opt := &github.IssueRequest {
-        Title: github.String("2020/05/23"),
-    }
-    
-    client.Issues.Create(context.Background(), "bvltiggeari", "diary", opt)
-
-    issues, _, err := client.Issues.ListByRepo(context.Background(), "bvltiggeari", "diary", nil)
-    fmt.Println(issues)
-    fmt.Println(err)
-
+    fmt.Println(utils.ReadIssues(utils.Yaml().GitHub.Token, utils.Yaml().GitHub.User, utils.Yaml().GitHub.Project))
     return e.Render(http.StatusOK, "index.html", "")
   })
   e.GET("/login", func (e echo.Context) error {
