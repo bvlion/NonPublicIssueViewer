@@ -10,25 +10,82 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [10.16.0]
-
     steps:
-    - uses: actions/checkout@v1
-    - name: Run tests with ${{ matrix.node-version }}
+    - name: Set Up Node
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
-    - name: yarn install, build
-      run: |
-        yarn install
-        NODE_ENV=production yarn run build
-    - name: GAE deploy
-      run: |
-        openssl aes-256-cbc -k {パスワード} -d -in encrypt-google-services.json -out google-services.json
-        gcloud auth activate-service-account --key-file {事前準備で保存したjsonキーファイル}
-        gcloud app deploy app.yaml --project {GCPプロジェクト名}
+        node-version: '13.x'
 
+    - name: checkout
+      uses: actions/checkout@v2
+
+    - name: Cache node modules
+      uses: actions/cache@v1
       env:
-        CI: true
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+
+    - name: Install Dependencies
+      run: |
+        cd assets
+        npm install
+        cd ..
+
+    - name: CSS JS Build
+      run: |
+        cd assets
+        node_modules/.bin/gulp minify-css minify-js
+        cd ..
+
+    - name: Set Up Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.12
+
+    - name: Cache Go
+      uses: actions/cache@v1
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Set external file
+      env:
+        BG_URL: ${{ secrets.BG_URL }}
+      run: curl -o source/public/images/bg.jpg $BG_URL
+
+    - name: Set secret.yaml
+      env:
+        SECRET_GITHUB_TOKEN: ${{ secrets.SECRET_GITHUB_TOKEN }}
+        SECRET_GITHUB_USER: ${{ secrets.SECRET_GITHUB_USER }}
+        SECRET_GITHUB_PROJECT: ${{ secrets.SECRET_GITHUB_PROJECT }}
+        SECRET_LOGIN_PASS: ${{ secrets.SECRET_LOGIN_PASS }}
+        SECRET_SESSION_KEY: ${{ secrets.SECRET_SESSION_KEY }}
+      run: |
+        echo "github:" >> source/secret.yaml
+        echo "  token: $SECRET_GITHUB_TOKEN" >> source/secret.yaml
+        echo "  user: $SECRET_GITHUB_TOKEN" >> source/secret.yaml
+        echo "  project: $SECRET_GITHUB_PROJECT" >> source/secret.yaml
+        echo "login_pass: $SECRET_LOGIN_PASS" >> source/secret.yaml
+        echo "session_key: $SECRET_SESSION_KEY" >> source/secret.yaml
+
+
+    - name: Go Build
+      run: |
+        cd source
+        go build
+
+    - name: GAE deploy
+      env:
+        DECRYPT_PASSWORD: ${{ secrets.DECRYPT_PASSWORD }}
+        PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+      run: |
+        openssl aes-256-cbc -k $DECRYPT_PASSWORD -d -in encrypt-google-services.json -out google-services.json
+        gcloud auth activate-service-account --key-file google-services.json
+        gcloud app deploy app.yaml --project $PROJECT_NAME

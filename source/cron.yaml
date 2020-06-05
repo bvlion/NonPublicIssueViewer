@@ -1,0 +1,5 @@
+cron:
+- description: "7:00 に issue を作成"
+  url: /create-issue
+  timezone: Asia/Tokyo
+  schedule: every day 7:00

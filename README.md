@@ -5,4 +5,4 @@
 ## GAE リリース
 
 json を複合化して GitHub Actions で行います。  
-https://docs.google.com/document/d/1taZlvQ9gpv4pYzD\_9ZCNAiMItSoPtYBTH15o7lJFCjk/edit
+https://docs.google.com/document/d/1taZlvQ9gpv4pYzD_9ZCNAiMItSoPtYBTH15o7lJFCjk/edit

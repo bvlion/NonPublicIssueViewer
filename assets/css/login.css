@@ -163,7 +163,6 @@ img {
     max-width: 100%;
 }
 html {
-    backdrop-filter: contrast(43%);
     height: 100%;
 }
 body {
@@ -171,13 +170,15 @@ body {
     background-size: cover;
     text-align: center;
     font-family: 'Open Sans', sans-serif;
+    backdrop-filter: contrast(70%);
+    height: 100%;
 }
 .header-w3l {
-    margin: 75px;
+    padding: 75px;
 }
 .header-w3l h1 {
     font-size: 3.9em;
-    color: #538826;
+    color: #f4ffeb;
     letter-spacing: 6px;
     font-weight: 400;
     font-family: 'Monsieur La Doulaise', cursive;
@@ -194,9 +195,9 @@ body {
     margin: 0 0 15px;
     font-family: 'Open Sans', sans-serif;
     background: none;
-    border-bottom: 2px solid #538826;
+    border-bottom: 2px solid #f4ffeb;
     width: 20%;
-    color: #538826;
+    color: #f4ffeb;
     font-weight: 600;
 }
 .sub-main-w3 input[type="button"] {
@@ -206,7 +207,7 @@ body {
     margin-top: 38px;
     border-radius: 50%;
     cursor: pointer;
-    border: 2px solid #325613;
+    border: 2px solid #dcf1ca;
     width: 67px;
     background-size: contain;
 }
@@ -225,16 +226,16 @@ body {
     text-decoration: underline;
 }
 ::-webkit-input-placeholder {
-    color: #538826;
+    color: #f4ffeb;
 }
 :-moz-placeholder {
-    color: #538826;
+    color: #f4ffeb;
 }
 ::-moz-placeholder {
-    color: #538826;
+    color: #f4ffeb;
 }
 :-ms-input-placeholder {
-    color: #538826;
+    color: #f4ffeb;
 }
 @media(max-width:1366px) {
     .sub-main-w3 input[type="password"],
@@ -302,7 +303,7 @@ body {
         margin: 224px 0 24px;
     }
     .header-w3l {
-        margin: 38px;
+        padding: 38px;
     }
 }
 @media(max-width:640px) {
@@ -325,7 +326,7 @@ body {
         font-size: 0.9em;
     }
     .header-w3l {
-        margin: 52px;
+        padding: 52px;
     }
 }
 @media(max-width:568px) {
@@ -338,12 +339,12 @@ body {
         font-size: 0.9em;
     }
     .header-w3l {
-        margin: 24px 0;
+        padding: 24px 0;
     }
 }
 @media(max-width:480px) {
     .header-w3l {
-        margin: 48px 0;
+        padding: 48px 0;
     }
     .header-w3l h1 {
         font-size: 31px;
@@ -409,7 +410,7 @@ body {
 }
 @media(max-width:320px) {
     .header-w3l {
-        margin: 31px 0;
+        padding: 31px 0;
     }
     .header-w3l h1 {
         font-size: 28px;

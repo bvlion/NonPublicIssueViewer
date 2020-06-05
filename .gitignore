@@ -1,5 +1,7 @@
 pkg
-src/main/vendor
 assets/node_modules
-src/main/public/images/bg.jpg
-src/main/secret.yaml
+source/public/images/bg.jpg
+source/secret.yaml
+source/source
+source/public/js
+source/public/css

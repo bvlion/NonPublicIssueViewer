@@ -23,7 +23,7 @@ gulp.task(jsTask, () =>
     .pipe(plumber({
       errorHandler: notify.onError('Error: <%= error.message %>')
     }))
-    .pipe(gulp.dest('../src/main/public/js/'))
+    .pipe(gulp.dest('../source/public/js/'))
 )
 
 gulp.task(cssTask, () =>
@@ -35,7 +35,7 @@ gulp.task(cssTask, () =>
     .pipe(plumber({
       errorHandler: notify.onError('Error: <%= error.message %>') 
     }))
-    .pipe(gulp.dest('../src/main/public/css/'))
+    .pipe(gulp.dest('../source/public/css/'))
 )
 
 gulp.task('watch', () => {
