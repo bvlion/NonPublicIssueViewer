@@ -87,7 +87,7 @@ jobs:
         PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
       run: |
         cd source
-        openssl aes-256-cbc -k $DECRYPT_PASSWORD -d -in encrypt-google-services.json -out google-services.json
+        openssl aes-256-cbc -k $DECRYPT_PASSWORD -d -in encrypt-google-services.json -out google-services.json -md md5
         gcloud auth activate-service-account --key-file google-services.json
         gcloud --quiet app deploy app.yaml --project=$PROJECT_NAME --version=$GITHUB_RUN_NUMBER
         gcloud --quiet app deploy cron.yaml --project=$PROJECT_NAME --version=$GITHUB_RUN_NUMBER
