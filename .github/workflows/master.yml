@@ -90,5 +90,6 @@ jobs:
 
     - name: GAE Deploy
       run: |
+        cd source
         gcloud --quiet app deploy app.yaml --version=$GITHUB_RUN_NUMBER
         gcloud --quiet app deploy cron.yaml --version=$GITHUB_RUN_NUMBER
