@@ -81,11 +81,14 @@ jobs:
         go build
         cd ..
 
-    - name: GAE deploy
+    - name: Setup GCP Auth
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
-    - run: |
+        export_default_credentials: true
+
+    - name: GAE Deploy
+      run: |
         gcloud --quiet app deploy app.yaml --version=$GITHUB_RUN_NUMBER
         gcloud --quiet app deploy cron.yaml --version=$GITHUB_RUN_NUMBER
