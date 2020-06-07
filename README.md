@@ -4,5 +4,9 @@
 
 ## GAE リリース
 
-json を複合化して GitHub Actions で行います。  
+json を base 64 エンコードして secret に設定する
+権限は以下を付与
+<img src="https://user-images.githubusercontent.com/24517539/83963454-45c70400-a8e1-11ea-89d2-dee5e5320418.png">
+
+元のファイル
 https://docs.google.com/document/d/1taZlvQ9gpv4pYzD_9ZCNAiMItSoPtYBTH15o7lJFCjk/edit

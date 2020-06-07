@@ -1,6 +1,7 @@
 pkg
 assets/node_modules
 source/public/images/bg.jpg
+source/public/images/404.jpg
 source/secret.yaml
 source/source
 source/public/js

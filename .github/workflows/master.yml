@@ -56,9 +56,9 @@ jobs:
           ${{ runner.os }}-go-
 
     - name: Set external file
-      env:
-        BG_URL: ${{ secrets.BG_URL }}
-      run: curl -o source/public/images/bg.jpg $BG_URL
+      run: |
+        curl -o source/public/images/bg.jpg ${{ secrets.BG_URL }}
+        curl -o source/public/images/404.jpg ${{ secrets.NOT_FOUND_URL }}
 
     - name: Set secret.yaml
       env:
@@ -92,4 +92,4 @@ jobs:
       run: |
         cd source
         gcloud --quiet app deploy app.yaml --version=$GITHUB_RUN_NUMBER
-        gcloud --quiet app deploy cron.yaml --version=$GITHUB_RUN_NUMBER
+        gcloud --quiet app deploy cron.yaml

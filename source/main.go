@@ -38,8 +38,12 @@ func main() {
   e.HTTPErrorHandler = func(err error, c echo.Context) {
     if he, ok := err.(*echo.HTTPError); ok {
       code := he.Code
-      log.ErrorLog(err)
-      c.JSON(code, err.Error())
+      log.ErrorLog(err.Error())
+      if code == http.StatusNotFound {
+        c.Render(code, "404.html", "")
+      } else {
+        c.JSON(code, map[string] string { "error": err.Error() })
+      }
     }
   }
 
