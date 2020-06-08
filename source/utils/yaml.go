@@ -9,7 +9,7 @@ import (
 
 type yaml struct {
   GitHub githubs `yaml:"github"`
-  Password string `yaml:"login_pass"`
+  Passphrase string `yaml:"login_pass"`
   SessionKey string `yaml:"session_key"`
 }
 
