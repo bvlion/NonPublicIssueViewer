@@ -61,7 +61,7 @@ jobs:
         curl -o source/public/images/404.jpg ${{ secrets.NOT_FOUND_URL }}
 
     - name: Set secret.yaml
-      run: echo "${{ secrets.SECRET_YAML_BASE64 }}" | base64b -d > source/secret.yaml
+      run: echo "${{ secrets.SECRET_YAML_BASE64 }}" | base64 -d > source/secret.yaml
 
     - name: Go Build
       run: |
