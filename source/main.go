@@ -102,6 +102,7 @@ func main() {
   e.GET("/logout", func (e echo.Context) error {
     session := session.Default(e)
     session.Clear()
+    session.Save()
 
     return e.Redirect(http.StatusFound, "/login")
   })
