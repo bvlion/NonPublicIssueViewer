@@ -83,8 +83,13 @@ jobs:
         gcloud --quiet app deploy cron.yaml
 
     - name: Notify slack
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      uses: pullreminders/slack-action@master
-      with:
-        args: '{\"channel\":\"${{ secrets.SLACK_CHANNEL_ID }}\",\"text\":\"Success Build\\nhttps://github.com/bvlion/NonPublicIssueViewer/commit/${{ secrets.GITHUB_SHA }}\"}'
+      run: |
+        curl -v -X POST --data-urlencode \
+          "payload={\
+            \"channel\": \"#${{ secrets.SLACK_CHANNEL_ID }}\", \
+            \"icon_url\": \"${{ secrets.SLACK_ICON_URL }}\", \
+            \"as_user\": \"true\", \
+            \"username\": \"GAE Deploy(GitHub Actions)\", \
+            \"text\": \"\Success Build\\nhttps://github.com/bvlion/NonPublicIssueViewer/commit/${{ github.sha }}\\nhttps://github.com/bvlion/NonPublicIssueViewer/runs/${{ github.run_id }}\"\
+          \}" \
+          ${{ secrets.SLACK_WEBHOOK_URL }}

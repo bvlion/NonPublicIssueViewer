@@ -48,11 +48,13 @@ func CreateNewTodaysIssue(token string, user string, project string) {
 
 <img src="" width="320"/>
 
-## その他感想的なもの`),
+## その他感想的なもの
+`),
   }
   _, res, err := client(token).Issues.Create(context.Background(), user, project, opt)
   if err != nil {
-    log.ErrorLog(err)
+    log.ErrorLog(fmt.Sprintf("%#v", err))
+    CreateNewTodaysIssue(token, user, project)
   }
   if res != nil {
     log.InfoLog(fmt.Sprintf("%#v", res))
