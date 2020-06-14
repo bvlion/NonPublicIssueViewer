@@ -89,7 +89,7 @@ jobs:
             \"channel\": \"#${{ secrets.SLACK_CHANNEL_ID }}\", \
             \"icon_url\": \"${{ secrets.SLACK_ICON_URL }}\", \
             \"as_user\": \"true\", \
-            \"username\": \"GAE Deploy(GitHub Actions)\", \
-            \"text\": \"\Success Build\\nhttps://github.com/bvlion/NonPublicIssueViewer/commit/${{ github.sha }}\\nhttps://github.com/bvlion/NonPublicIssueViewer/runs/${{ github.run_id }}\"\
-          \}" \
+            \"username\": \"GAE Deploy (GitHub Actions)\", \
+            \"text\": \"Success Build\\nhttps://github.com/bvlion/NonPublicIssueViewer/commit/${{ github.sha }}\\nhttps://github.com/bvlion/NonPublicIssueViewer/runs/${{ github.run_id }}\"\
+          }" \
           ${{ secrets.SLACK_WEBHOOK_URL }}
