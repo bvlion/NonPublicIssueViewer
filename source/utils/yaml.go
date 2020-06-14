@@ -11,6 +11,7 @@ type yaml struct {
   GitHub githubs `yaml:"github"`
   Passphrase string `yaml:"login_pass"`
   SessionKey string `yaml:"session_key"`
+  FooterLinks map[string] string `yaml:"footer_links"`
 }
 
 type githubs struct {

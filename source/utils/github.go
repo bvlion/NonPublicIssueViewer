@@ -14,9 +14,11 @@ var gclient *github.Client
 var onceClient sync.Once
 
 const dateFormat = "2006/01/02"
+const monthFormat = "2006/01"
 
-func ReadIssues(token string, user string, project string) []*github.Issue {
-  issues, _, err := client(token).Issues.ListByRepo(context.Background(), user, project, nil)
+func ReadIssues(token string, user string, project string, targetMonth string) []*github.Issue {
+  opt := &github.IssueListByRepoOptions { Labels: []string{ targetMonth } }
+  issues, _, err := client(token).Issues.ListByRepo(context.Background(), user, project, opt)
   if err != nil {
     log.ErrorLog(err)
   }
@@ -25,6 +27,7 @@ func ReadIssues(token string, user string, project string) []*github.Issue {
 
 func CreateNewTodaysIssue(token string, user string, project string) {
   opt := &github.IssueRequest {
+    Labels: &[]string{ time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60)).Format(monthFormat) },
 	  Title: github.String(time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60)).Format(dateFormat)),
 	  Body:  github.String(`## やったこと
 

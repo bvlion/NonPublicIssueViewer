@@ -6,6 +6,7 @@ import (
   "io"
   "os"
   "fmt"
+  "time"
   "github.com/labstack/echo"
   "github.com/ipfans/echo-session"
   "source/utils"
@@ -13,6 +14,9 @@ import (
 )
 
 const sessionName = "logined"
+const startDate = "2020/05/13"
+const dateFormat = "2006/01/02"
+const monthFormat = "2006/01"
 
 type Template struct {
   templates *template.Template
@@ -20,6 +24,17 @@ type Template struct {
 
 type LoginParams struct {
   Passphrase string `json:"passphrase"`
+}
+
+type IndexData struct {
+  Footer map[string] string
+  Dates []DateList
+}
+
+type DateList struct {
+  Title string
+  Date string
+  Key string
 }
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
@@ -68,8 +83,31 @@ func main() {
       return e.Redirect(http.StatusFound, "/login")
     }
 
-    log.DebugLog(utils.ReadIssues(utils.Yaml().GitHub.Token, utils.Yaml().GitHub.User, utils.Yaml().GitHub.Project))
-    return e.Render(http.StatusOK, "index.html", "")
+    // utils.CreateNewTodaysIssue(utils.Yaml().GitHub.Token, utils.Yaml().GitHub.User, utils.Yaml().GitHub.Project)
+
+    t := time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60))
+    month := ""
+    dates := []DateList{}
+    for {
+      key := ""
+      ymd := t.Format(dateFormat)
+      ym := t.Format(monthFormat)
+      if month != ym {
+        month = ym
+        key = month
+      }
+      dates = append(dates, DateList { Title: key, Date: ymd, Key: t.Format("200601") })
+      if ymd == startDate {
+        break
+      }
+      t = t.AddDate(0, 0, -1)
+    }
+
+    data := IndexData {
+      Footer: utils.Yaml().FooterLinks,
+      Dates: dates,
+    }
+    return e.Render(http.StatusOK, "index.html", data)
   })
 
   e.GET("/login", func (e echo.Context) error {

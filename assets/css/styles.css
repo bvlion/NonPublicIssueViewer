@@ -1,63 +1,46 @@
-/**
- * Copyright 2015 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
   margin: 0;
   padding: 0;
 }
-.mdl-demo .mdl-layout__header-row {
+.mdl-diary .mdl-layout__header-row {
   padding-left: 40px;
 }
-.mdl-demo .mdl-layout.is-small-screen .mdl-layout__header-row h3 {
+.mdl-diary .mdl-layout.is-small-screen .mdl-layout__header-row h3 {
   font-size: inherit;
 }
-.mdl-demo .mdl-layout__tab-bar-button {
+.mdl-diary .mdl-layout__tab-bar-button {
   display: none;
 }
-.mdl-demo .mdl-layout.is-small-screen .mdl-layout__tab-bar .mdl-button {
+.mdl-diary .mdl-layout.is-small-screen .mdl-layout__tab-bar .mdl-button {
   display: none;
 }
-.mdl-demo .mdl-layout:not(.is-small-screen) .mdl-layout__tab-bar,
-.mdl-demo .mdl-layout:not(.is-small-screen) .mdl-layout__tab-bar-container {
+.mdl-diary .mdl-layout:not(.is-small-screen) .mdl-layout__tab-bar,
+.mdl-diary .mdl-layout:not(.is-small-screen) .mdl-layout__tab-bar-container {
   overflow: visible;
 }
-.mdl-demo .mdl-layout__tab-bar-container {
+.mdl-diary .mdl-layout__tab-bar-container {
   height: 64px;
 }
-.mdl-demo .mdl-layout__tab-bar {
+.mdl-diary .mdl-layout__tab-bar {
   padding: 0;
   padding-left: 16px;
   box-sizing: border-box;
   height: 100%;
   width: 100%;
 }
-.mdl-demo .mdl-layout__tab-bar .mdl-layout__tab {
+.mdl-diary .mdl-layout__tab-bar .mdl-layout__tab {
   height: 64px;
   line-height: 64px;
 }
-.mdl-demo .mdl-layout__tab-bar .mdl-layout__tab.is-active::after {
+.mdl-diary .mdl-layout__tab-bar .mdl-layout__tab.is-active::after {
   background-color: white;
   height: 4px;
 }
-.mdl-demo main > .mdl-layout__tab-panel {
-  padding: 8px;
-  padding-top: 48px;
+.mdl-diary main > .mdl-layout__tab-panel {
+  padding: 48px 16px;
 }
-.mdl-demo .mdl-card {
+.mdl-diary .mdl-card {
   height: auto;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -66,10 +49,10 @@ html, body {
       -ms-flex-direction: column;
           flex-direction: column;
 }
-.mdl-demo .mdl-card > * {
+.mdl-diary .mdl-card > * {
   height: auto;
 }
-.mdl-demo .mdl-card .mdl-card__supporting-text {
+.mdl-diary .mdl-card .mdl-card__supporting-text {
   margin: 40px;
   -webkit-flex-grow: 1;
       -ms-flex-positive: 1;
@@ -78,45 +61,45 @@ html, body {
   color: inherit;
   width: calc(100% - 80px);
 }
-.mdl-demo.mdl-demo .mdl-card__supporting-text h4 {
+.mdl-diary.mdl-diary .mdl-card__supporting-text h4 {
   margin-top: 0;
   margin-bottom: 20px;
 }
-.mdl-demo .mdl-card__actions {
+.mdl-diary .mdl-card__actions {
   margin: 0;
   padding: 4px 40px;
   color: inherit;
 }
-.mdl-demo .mdl-card__actions a {
+.mdl-diary .mdl-card__actions a {
   color: #00BCD4;
   margin: 0;
 }
-.mdl-demo .mdl-card__actions a:hover,
-.mdl-demo .mdl-card__actions a:active {
+.mdl-diary .mdl-card__actions a:hover,
+.mdl-diary .mdl-card__actions a:active {
   color: inherit;
   background-color: transparent;
 }
-.mdl-demo .mdl-card__supporting-text + .mdl-card__actions {
+.mdl-diary .mdl-card__supporting-text + .mdl-card__actions {
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
-.mdl-demo #add {
+.mdl-diary #add {
   position: absolute;
   right: 40px;
   top: 36px;
   z-index: 999;
 }
 
-.mdl-demo .mdl-layout__content section:not(:last-of-type) {
+.mdl-diary .mdl-layout__content section:not(:last-of-type) {
   position: relative;
   margin-bottom: 48px;
 }
-.mdl-demo section.section--center {
+.mdl-diary section.section--center {
   max-width: 860px;
 }
-.mdl-demo #features section.section--center {
+.mdl-diary #features section.section--center {
   max-width: 620px;
 }
-.mdl-demo section > header{
+.mdl-diary section > header{
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -127,19 +110,19 @@ html, body {
       -ms-flex-pack: center;
           justify-content: center;
 }
-.mdl-demo section > .section__play-btn {
+.mdl-diary section > .section__play-btn {
   min-height: 200px;
 }
-.mdl-demo section > header > .material-icons {
+.mdl-diary section > header > .material-icons {
   font-size: 3rem;
 }
-.mdl-demo section > button {
+.mdl-diary section > button {
   position: absolute;
   z-index: 99;
   top: 8px;
   right: 8px;
 }
-.mdl-demo section .section__circle {
+.mdl-diary section .section__circle {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -156,7 +139,7 @@ html, body {
       -ms-flex-negative: 1;
           flex-shrink: 1;
 }
-.mdl-demo section .section__text {
+.mdl-diary section .section__text {
   -webkit-flex-grow: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
@@ -165,52 +148,52 @@ html, body {
           flex-shrink: 0;
   padding-top: 8px;
 }
-.mdl-demo section .section__text h5 {
+.mdl-diary section .section__text h5 {
   font-size: inherit;
   margin: 0;
   margin-bottom: 0.5em;
 }
-.mdl-demo section .section__text a {
+.mdl-diary section .section__text a {
   text-decoration: none;
 }
-.mdl-demo section .section__circle-container > .section__circle-container__circle {
+.mdl-diary section .section__circle-container > .section__circle-container__circle {
   width: 64px;
   height: 64px;
   border-radius: 32px;
   margin: 8px 0;
 }
-.mdl-demo section.section--footer .section__circle--big {
+.mdl-diary section.section--footer .section__circle--big {
   width: 100px;
   height: 100px;
   border-radius: 50px;
   margin: 8px 32px;
 }
-.mdl-demo .is-small-screen section.section--footer .section__circle--big {
+.mdl-diary .is-small-screen section.section--footer .section__circle--big {
   width: 50px;
   height: 50px;
   border-radius: 25px;
   margin: 8px 16px;
 }
-.mdl-demo section.section--footer {
+.mdl-diary section.section--footer {
   padding: 64px 0;
   margin: 0 -8px -8px -8px;
 }
-.mdl-demo section.section--center .section__text:not(:last-child) {
+.mdl-diary section.section--center .section__text:not(:last-child) {
   border-bottom: 1px solid rgba(0,0,0,.13);
 }
-.mdl-demo .mdl-card .mdl-card__supporting-text > h3:first-child {
+.mdl-diary .mdl-card .mdl-card__supporting-text > h3:first-child {
   margin-bottom: 24px;
 }
-.mdl-demo .mdl-layout__tab-panel:not(#overview) {
+.mdl-diary .mdl-layout__tab-panel:not(#overview) {
   background-color: white;
 }
-.mdl-demo #features section {
+.mdl-diary #features section {
   margin-bottom: 72px;
 }
-.mdl-demo #features h4, #features h5 {
+.mdl-diary #features h4, #features h5 {
   margin-bottom: 16px;
 }
-.mdl-demo .toc {
+.mdl-diary .toc {
   border-left: 4px solid #C1EEF4;
   margin: 24px;
   padding: 0;
@@ -222,18 +205,18 @@ html, body {
       -ms-flex-direction: column;
           flex-direction: column;
 }
-.mdl-demo .toc h4 {
+.mdl-diary .toc h4 {
   font-size: 0.9rem;
   margin-top: 0;
 }
-.mdl-demo .toc a {
+.mdl-diary .toc a {
   color: #4DD0E1;
   text-decoration: none;
   font-size: 16px;
   line-height: 28px;
   display: block;
 }
-.mdl-demo .mdl-menu__container {
+.mdl-diary .mdl-menu__container {
   z-index: 99;
 }
 .menu a {
@@ -249,7 +232,6 @@ label {
   padding : 15px;
   line-height: 1;
   color :#fff;
-  background : green;
   cursor :pointer;
 }
 
@@ -274,8 +256,7 @@ input {
   transition: all 0.5s;
 }
 
-#menu_bar01:checked ~ #links01 li,
-#menu_bar02:checked ~ #links02 li {
-  height: 54px;
+.menu_bar:checked ~ .links li {
+  height: 48px;
   opacity: 1;
 }
