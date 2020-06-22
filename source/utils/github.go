@@ -16,8 +16,12 @@ var onceClient sync.Once
 const dateFormat = "2006/01/02"
 const monthFormat = "2006/01"
 
-func ReadIssues(token string, user string, project string, targetMonth string) []*github.Issue {
-  opt := &github.IssueListByRepoOptions { Labels: []string{ targetMonth } }
+func ReadIssues(token string, user string, project string, addMonth int) []*github.Issue {
+  opt := &github.IssueListByRepoOptions {
+    Labels: []string {
+      time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60)).AddDate(0, addMonth, 0).Format(monthFormat),
+      },
+    }
   issues, _, err := client(token).Issues.ListByRepo(context.Background(), user, project, opt)
   if err != nil {
     log.ErrorLog(err)
