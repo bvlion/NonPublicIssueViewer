@@ -4,9 +4,9 @@
 
 ## GAE リリース
 
-json を base 64 エンコードして secret に設定する
-権限は以下を付与
+* json を base 64 エンコードして secret に設定する
+  * 権限は以下を付与
 <img src="https://user-images.githubusercontent.com/24517539/83963454-45c70400-a8e1-11ea-89d2-dee5e5320418.png">
 
-元のファイル
-https://docs.google.com/document/d/1taZlvQ9gpv4pYzD_9ZCNAiMItSoPtYBTH15o7lJFCjk/edit
+Secrets に設定している元データ
+https://docs.google.com/spreadsheets/d/1dVHTc7CVa2ULY8xHKrgITgtFHJG1AEq5uEBKmaZQ7NA/edit
