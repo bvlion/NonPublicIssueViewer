@@ -11,6 +11,8 @@ import (
   "github.com/ipfans/echo-session"
   "source/utils"
   "source/log"
+  "regexp"
+  "strings"
 )
 
 const sessionName = "logined"
@@ -29,6 +31,9 @@ type LoginParams struct {
 type IndexData struct {
   Footer map[string] string
   Dates []DateList
+  Breakfasts []DateList
+  Lunchs []DateList
+  Dinners []DateList
 }
 
 type DateList struct {
@@ -83,8 +88,7 @@ func main() {
       return e.Redirect(http.StatusFound, "/login")
     }
 
-    // utils.CreateNewTodaysIssue(utils.Yaml().GitHub.Token, utils.Yaml().GitHub.User, utils.Yaml().GitHub.Project)
-
+    // 日付一覧
     t := time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60))
     month := ""
     dates := []DateList{}
@@ -103,9 +107,88 @@ func main() {
       t = t.AddDate(0, 0, -1)
     }
 
+    issues := utils.ReadIssues(utils.Yaml().GitHub.Token, utils.Yaml().GitHub.User, utils.Yaml().GitHub.Project, 0)
+
+    breakfasts := []DateList{}
+    lunchs := []DateList{}
+    dinners := []DateList{}
+
+    for _, s := range issues {
+      breakfastMessage := ""
+      breakfastImage := ""
+      breakfastMessageStart := false
+      lunchMessage := ""
+      lunchImage := ""
+      lunchMessageStart := false
+      dinnerMessage := ""
+      dinnerImage := ""
+      dinnerMessageStart := false
+      otherMessage := ""
+      otherMessageStart := false
+
+      for _, v := range regexp.MustCompile("\r\n|\n\r|\n|\r").Split(*s.Body, -1) {
+        if v == "### 朝食" {
+          breakfastMessageStart = true
+        }
+        if v == "### 昼食" {
+          breakfastMessageStart = false
+          lunchMessageStart = true
+        }
+        if v == "### 夕食" {
+          lunchMessageStart = false
+          dinnerMessageStart = true
+        }
+        if v == "## その他感想的なもの" {
+          dinnerMessageStart = false
+          otherMessageStart = true
+        }
+        if breakfastMessageStart && v != "### 朝食" {
+          if strings.HasPrefix(v, "<img src") {
+            breakfastImage += v
+            breakfastImage += "\n"
+          } else if v != "" {
+            breakfastMessage += v
+            breakfastMessage += "\n"
+          }
+        }
+        if lunchMessageStart && v != "### 昼食" {
+          if strings.HasPrefix(v, "<img src") {
+            lunchImage += v
+            lunchImage += "\n"
+          } else if v != "" {
+            lunchMessage += v
+            lunchMessage += "\n"
+          }
+        }
+        if dinnerMessageStart && v != "### 夕食" {
+          if strings.HasPrefix(v, "<img src") {
+            dinnerImage += v
+            dinnerImage += "\n"
+          } else if v != "" {
+            dinnerMessage += v
+            dinnerMessage += "\n"
+          }
+        }
+        if otherMessageStart && v != "## その他感想的なもの" {
+            otherMessage += v
+            otherMessage += "\n"
+        }
+      }
+
+      fmt.Println(breakfastMessage)
+      fmt.Println(lunchMessage)
+      fmt.Println(dinnerMessage)
+      fmt.Println(breakfastImage)
+      fmt.Println(lunchImage)
+      fmt.Println(dinnerImage)
+    }
+
     data := IndexData {
       Footer: utils.Yaml().FooterLinks,
       Dates: dates,
+      Breakfasts: breakfasts,
+      Lunchs: lunchs,
+      Dinners: dinners,
     }
     return e.Render(http.StatusOK, "index.html", data)
   })
