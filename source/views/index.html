@@ -51,22 +51,44 @@
         </div>
 
         <div class="mdl-layout__tab-panel" id="breakfast">
-          <section class="section--center mdl-grid mdl-grid--no-spacing">
-            <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__title">
-                <h2 class="mdl-card__title-text">Welcome</h2>
-              </div>
-              <div class="mdl-card__supporting-text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Mauris sagittis pellentesque lacus eleifend lacinia...
-              </div>
-            </div>            
+          <section class="mdl-grid mdl-grid--no-spacing">
+            {{ range $i, $value := .Breakfasts }}
+              <div class="demo-card-wide mdl-card card-margin mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">{{ $value.Date }}</h2>
+                </div>
+                <div class="flex-grow"><pre>{{ $value.Title }}</pre></div>
+                {{ $value.Key|safehtml }}
+              </div>            
+            {{ end }}
           </section>
         </div>
 
         <div class="mdl-layout__tab-panel" id="lunch">
+          <section class="mdl-grid mdl-grid--no-spacing">
+            {{ range $i, $value := .Lunchs }}
+              <div class="demo-card-wide mdl-card card-margin mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">{{ $value.Date }}</h2>
+                </div>
+                <div class="flex-grow"><pre>{{ $value.Title }}</pre></div>
+                {{ $value.Key|safehtml }}
+              </div>            
+            {{ end }}
+          </section>
         </div>
         <div class="mdl-layout__tab-panel" id="dinner">
+          <section class="mdl-grid mdl-grid--no-spacing">
+            {{ range $i, $value := .Dinners }}
+              <div class="demo-card-wide mdl-card card-margin mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">{{ $value.Date }}</h2>
+                </div>
+                <div class="flex-grow"><pre>{{ $value.Title }}</pre></div>
+                {{ $value.Key|safehtml }}
+              </div>            
+            {{ end }}
+          </section>
         </div>
         <div class="mdl-layout__tab-panel" id="impressionistic">
         </div>

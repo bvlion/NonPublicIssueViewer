@@ -49,8 +49,11 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 func main() {
   log.LogSetUp()
 
+  funcMap := template.FuncMap{
+    "safehtml": func(text string) template.HTML { return template.HTML(text) },
+  }
   t := &Template{
-    templates: template.Must(template.ParseGlob("views/*.html")),
+    templates: template.Must(template.New("").Funcs(funcMap).ParseGlob("views/*.html")),
   }
 
   e := echo.New()
@@ -113,6 +116,8 @@ func main() {
     lunchs := []DateList{}
     dinners := []DateList{}
 
+    wdays := [...] string{ "日", "月", "火", "水", "木", "金", "土" }
+
     for _, s := range issues {
       breakfastMessage := ""
       breakfastImage := ""
@@ -143,7 +148,7 @@ func main() {
           otherMessageStart = true
         }
         if breakfastMessageStart && v != "### 朝食" {
-          if strings.HasPrefix(v, "<img src") {
+          if strings.HasPrefix(v, "<img") {
             breakfastImage += v
             breakfastImage += "\n"
           } else if v != "" {
@@ -152,7 +157,7 @@ func main() {
           }
         }
         if lunchMessageStart && v != "### 昼食" {
-          if strings.HasPrefix(v, "<img src") {
+          if strings.HasPrefix(v, "<img") {
             lunchImage += v
             lunchImage += "\n"
           } else if v != "" {
@@ -161,7 +166,7 @@ func main() {
           }
         }
         if dinnerMessageStart && v != "### 夕食" {
-          if strings.HasPrefix(v, "<img src") {
+          if strings.HasPrefix(v, "<img") {
             dinnerImage += v
             dinnerImage += "\n"
           } else if v != "" {
@@ -175,12 +180,22 @@ func main() {
         }
       }
 
-      fmt.Println(breakfastMessage)
-      fmt.Println(lunchMessage)
-      fmt.Println(dinnerMessage)
-      fmt.Println(breakfastImage)
-      fmt.Println(lunchImage)
-      fmt.Println(dinnerImage)
+      if breakfastMessage == "" {
+        breakfastMessage = "未記入"
+      }
+      if lunchMessage == "" {
+        lunchMessage = "未記入"
+      }
+      if dinnerMessage == "" {
+        dinnerMessage = "未記入"
+      }
+
+      date, _ := time.Parse("2006/01/02", *s.Title)
+      dateString := *s.Title + "（" + wdays[date.Weekday()] + "）"
+
+      breakfasts = append(breakfasts, DateList { Title: breakfastMessage, Date: dateString, Key: breakfastImage })
+      lunchs = append(lunchs, DateList { Title: lunchMessage, Date: dateString, Key: lunchImage })
+      dinners = append(dinners, DateList { Title: dinnerMessage, Date: dateString, Key: dinnerImage })
     }
 
     data := IndexData {

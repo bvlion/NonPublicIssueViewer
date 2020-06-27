@@ -38,7 +38,7 @@ html, body {
   height: 4px;
 }
 .mdl-diary main > .mdl-layout__tab-panel {
-  padding: 48px 16px;
+  padding: 48px;
 }
 .mdl-diary .mdl-card {
   height: auto;
@@ -259,4 +259,16 @@ input {
 .menu_bar:checked ~ .links li {
   height: 48px;
   opacity: 1;
+}
+
+.flex-grow {
+  padding: 0 10px;
+}
+
+img {
+  margin: 5px;
+}
+
+.card-margin {
+  margin: 8px;
 }
