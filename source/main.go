@@ -34,6 +34,7 @@ type IndexData struct {
   Breakfasts []DateList
   Lunchs []DateList
   Dinners []DateList
+  Others []DateList
 }
 
 type DateList struct {
@@ -115,8 +116,11 @@ func main() {
     breakfasts := []DateList{}
     lunchs := []DateList{}
     dinners := []DateList{}
+    others := []DateList{}
 
     wdays := [...] string{ "日", "月", "火", "水", "木", "金", "土" }
+
+    imgReplace := regexp.MustCompile("img.*src")
 
     for _, s := range issues {
       breakfastMessage := ""
@@ -149,7 +153,7 @@ func main() {
         }
         if breakfastMessageStart && v != "### 朝食" {
           if strings.HasPrefix(v, "<img") {
-            breakfastImage += v
+            breakfastImage += imgReplace.ReplaceAllString(v, "img class='lazyload' data-src")
             breakfastImage += "\n"
           } else if v != "" {
             breakfastMessage += v
@@ -161,13 +165,13 @@ func main() {
             lunchImage += v
             lunchImage += "\n"
           } else if v != "" {
-            lunchMessage += v
+            lunchMessage += imgReplace.ReplaceAllString(v, "img class='lazyload' data-src")
             lunchMessage += "\n"
           }
         }
         if dinnerMessageStart && v != "### 夕食" {
           if strings.HasPrefix(v, "<img") {
-            dinnerImage += v
+            dinnerImage += imgReplace.ReplaceAllString(v, "img class='lazyload' data-src")
             dinnerImage += "\n"
           } else if v != "" {
             dinnerMessage += v
@@ -175,8 +179,8 @@ func main() {
           }
         }
         if otherMessageStart && v != "## その他感想的なもの" {
-            otherMessage += v
-            otherMessage += "\n"
+            otherMessage += imgReplace.ReplaceAllString(v, "img class='lazyload' data-src")
+            otherMessage += "<br>"
         }
       }
 
@@ -196,6 +200,7 @@ func main() {
       breakfasts = append(breakfasts, DateList { Title: breakfastMessage, Date: dateString, Key: breakfastImage })
       lunchs = append(lunchs, DateList { Title: lunchMessage, Date: dateString, Key: lunchImage })
       dinners = append(dinners, DateList { Title: dinnerMessage, Date: dateString, Key: dinnerImage })
+      others = append(others, DateList { Title: otherMessage, Date: dateString, Key: "" })
     }
 
     data := IndexData {
@@ -204,6 +209,7 @@ func main() {
       Breakfasts: breakfasts,
       Lunchs: lunchs,
       Dinners: dinners,
+      Others: others,
     }
     return e.Render(http.StatusOK, "index.html", data)
   })

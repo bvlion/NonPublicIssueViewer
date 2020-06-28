@@ -265,10 +265,27 @@ input {
   padding: 0 10px;
 }
 
+.flex-grow img {
+  margin-left: -5px;
+}
+
 img {
   margin: 5px;
 }
 
 .card-margin {
   margin: 8px;
+}
+
+pre {
+  white-space: pre-line;
+}
+
+.lazyload {
+  opacity: 0;
+}
+
+.is-lazyloaded {
+  opacity: 1;
+  transition: opacity .8s ease-out;
 }

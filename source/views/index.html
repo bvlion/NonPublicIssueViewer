@@ -91,6 +91,16 @@
           </section>
         </div>
         <div class="mdl-layout__tab-panel" id="impressionistic">
+          <section class="mdl-grid mdl-grid--no-spacing">
+            {{ range $i, $value := .Others }}
+              <div class="demo-card-wide mdl-card card-margin mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">{{ $value.Date }}</h2>
+                </div>
+                <div class="flex-grow">{{ $value.Title|safehtml }}</div>
+              </div>            
+            {{ end }}
+          </section>
         </div>
 
         <footer class="mdl-mega-footer">
@@ -111,5 +121,6 @@
       </main>
     </div>
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="/js/index.min.js"></script>
   </body>
 </html>
