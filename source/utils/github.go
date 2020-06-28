@@ -16,10 +16,19 @@ var onceClient sync.Once
 const dateFormat = "2006/01/02"
 const monthFormat = "2006/01"
 
-func ReadIssues(token string, user string, project string, addMonth int) []*github.Issue {
+func ReadOneIssue(token string, user string, project string, title string) []*github.Issue {
+  opt := &github.IssueListByRepoOptions { Labels: []string { title } }
+  issues, _, err := client(token).Issues.ListByRepo(context.Background(), user, project, opt)
+  if err != nil {
+    log.ErrorLog(err)
+  }
+  return issues
+}
+
+func ReadIssues(token string, user string, project string, minusMonth int) []*github.Issue {
   opt := &github.IssueListByRepoOptions {
     Labels: []string {
-      time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60)).AddDate(0, addMonth, 0).Format(monthFormat),
+      time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60)).AddDate(0, minusMonth * -1, 0).Format(monthFormat),
       },
     }
   issues, _, err := client(token).Issues.ListByRepo(context.Background(), user, project, opt)
@@ -31,7 +40,10 @@ func ReadIssues(token string, user string, project string, addMonth int) []*gith
 
 func CreateNewTodaysIssue(token string, user string, project string) {
   opt := &github.IssueRequest {
-    Labels: &[]string{ time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60)).Format(monthFormat) },
+    Labels: &[]string {
+      time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60)).Format(monthFormat),
+      time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60)).Format(dateFormat),
+    },
 	  Title: github.String(time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60)).Format(dateFormat)),
 	  Body:  github.String(`## やったこと
 
