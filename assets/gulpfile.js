@@ -5,6 +5,8 @@ const cleanCSS = require('gulp-clean-css')
 const plumber = require('gulp-plumber')
 const notify  = require('gulp-notify')
 const rename = require('gulp-rename')
+const postcss = require("gulp-postcss")
+const autoprefixer = require("autoprefixer")
 
 const cssSrc = 'css/*.css'
 const cssTask = 'minify-css'
@@ -28,6 +30,9 @@ gulp.task(jsTask, () =>
 
 gulp.task(cssTask, () =>
   gulp.src(cssSrc)
+    .pipe(postcss([
+      autoprefixer({cascade: false})
+    ]))
     .pipe(cleanCSS())
     .pipe(rename({
       extname: '.min.css'
