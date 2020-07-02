@@ -289,3 +289,17 @@ pre {
   opacity: 1;
   transition: opacity .8s ease-out;
 }
+
+.center {
+  text-align: center;
+  text-align: -webkit-center;
+}
+
+#swal2-content ul {
+  text-align: left;
+}
+#swal2-content p {
+  text-align: left;
+  padding: 0 18px;
+  margin: 0;
+}

@@ -13,6 +13,7 @@ import (
   "source/log"
   "regexp"
   "strings"
+  "strconv"
 )
 
 const sessionName = "logined"
@@ -31,16 +32,19 @@ type LoginParams struct {
 type IndexData struct {
   Footer map[string] string
   Dates []DateList
-  Breakfasts []DateList
-  Lunchs []DateList
-  Dinners []DateList
-  Others []DateList
 }
 
 type DateList struct {
   Title string
   Date string
   Key string
+}
+
+type IssuesData struct {
+  Breakfasts []DateList
+  Lunchs []DateList
+  Dinners []DateList
+  Others []DateList
 }
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
@@ -111,7 +115,54 @@ func main() {
       t = t.AddDate(0, 0, -1)
     }
 
-    issues := utils.ReadIssues(utils.Yaml().GitHub.Token, utils.Yaml().GitHub.User, utils.Yaml().GitHub.Project, 0)
+    data := IndexData {
+      Footer: utils.Yaml().FooterLinks,
+      Dates: dates,
+    }
+
+    return e.Render(http.StatusOK, "index.html", data)
+  })
+
+  e.GET("/detail/:year/:month/:day", func (e echo.Context) error {
+    title := e.Param("year") + "/" + e.Param("month") + "/" + e.Param("day")
+    issues := utils.ReadOneIssue(
+      utils.Yaml().GitHub.Token,
+      utils.Yaml().GitHub.User,
+      utils.Yaml().GitHub.Project,
+      title,
+    )
+
+    body := ""
+    imgReplace := regexp.MustCompile("img.*src")
+
+    for _, s := range issues {
+      for _, v := range regexp.MustCompile("\r\n|\n\r|\n|\r").Split(*s.Body, -1) {
+        if strings.HasPrefix(v, "<img") {
+          body += imgReplace.ReplaceAllString(v, "img class='lazyload' data-src")
+          body += "<br>"
+        } else if strings.HasPrefix(v, "##") {
+          body += "\n#"
+          body += v
+        } else if strings.HasPrefix(v, "* ") || strings.HasPrefix(v, "- ") {
+          body += "\n"
+          body += v
+        } else if v != "" {
+          body += v
+          body += "<br>"
+        }
+        body += "\n"
+      }
+    }
+
+    return e.JSON(http.StatusOK, map [string] string {
+      "title": title,
+      "body": body,
+    })
+  })
+
+  e.GET("/issues/:minusMonth", func (e echo.Context) error {
+    minusMonth, _ := strconv.Atoi(e.Param("minusMonth"))
+    issues := utils.ReadIssues(utils.Yaml().GitHub.Token, utils.Yaml().GitHub.User, utils.Yaml().GitHub.Project, minusMonth)
 
     breakfasts := []DateList{}
     lunchs := []DateList{}
@@ -194,7 +245,7 @@ func main() {
         dinnerMessage = "未記入"
       }
 
-      date, _ := time.Parse("2006/01/02", *s.Title)
+      date, _ := time.Parse(dateFormat, *s.Title)
       dateString := *s.Title + "（" + wdays[date.Weekday()] + "）"
 
       breakfasts = append(breakfasts, DateList { Title: breakfastMessage, Date: dateString, Key: breakfastImage })
@@ -203,15 +254,14 @@ func main() {
       others = append(others, DateList { Title: otherMessage, Date: dateString, Key: "" })
     }
 
-    data := IndexData {
-      Footer: utils.Yaml().FooterLinks,
-      Dates: dates,
+    data := IssuesData {
       Breakfasts: breakfasts,
       Lunchs: lunchs,
       Dinners: dinners,
       Others: others,
     }
-    return e.Render(http.StatusOK, "index.html", data)
+    
+    return e.JSON(http.StatusOK, data)
   })
 
   e.GET("/login", func (e echo.Context) error {

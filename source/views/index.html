@@ -42,7 +42,7 @@
                     <input type="checkbox" id="menu_bar{{ $value.Key }}" class="accordion menu_bar" />
                     <ul class='mdl-list links'>
                   {{ end }}
-                  <li><a href="/detail/{{ $value.Date }}">{{ $value.Date }}</a></li>
+                  <li><a href="javascript:load_one_data('{{ $value.Date }}')">{{ $value.Date }}</a></li>
                 {{ end }}
                 </ul></div>
               </div>
@@ -51,56 +51,28 @@
         </div>
 
         <div class="mdl-layout__tab-panel" id="breakfast">
-          <section class="mdl-grid mdl-grid--no-spacing">
-            {{ range $i, $value := .Breakfasts }}
-              <div class="demo-card-wide mdl-card card-margin mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                  <h2 class="mdl-card__title-text">{{ $value.Date }}</h2>
-                </div>
-                <div class="flex-grow"><pre>{{ $value.Title }}</pre></div>
-                {{ $value.Key|safehtml }}
-              </div>            
-            {{ end }}
-          </section>
+          <div class="center" id="breakfast_progress">
+            <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+          </div>
+          <div id="breakfast_area"></div>
         </div>
-
         <div class="mdl-layout__tab-panel" id="lunch">
-          <section class="mdl-grid mdl-grid--no-spacing">
-            {{ range $i, $value := .Lunchs }}
-              <div class="demo-card-wide mdl-card card-margin mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                  <h2 class="mdl-card__title-text">{{ $value.Date }}</h2>
-                </div>
-                <div class="flex-grow"><pre>{{ $value.Title }}</pre></div>
-                {{ $value.Key|safehtml }}
-              </div>            
-            {{ end }}
-          </section>
+          <div class="center" id="lunch_progress">
+            <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+          </div>
+          <div id="lunch_area"></div>
         </div>
         <div class="mdl-layout__tab-panel" id="dinner">
-          <section class="mdl-grid mdl-grid--no-spacing">
-            {{ range $i, $value := .Dinners }}
-              <div class="demo-card-wide mdl-card card-margin mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                  <h2 class="mdl-card__title-text">{{ $value.Date }}</h2>
-                </div>
-                <div class="flex-grow"><pre>{{ $value.Title }}</pre></div>
-                {{ $value.Key|safehtml }}
-              </div>            
-            {{ end }}
-          </section>
+          <div class="center" id="dinner_progress">
+            <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+          </div>
+          <div id="dinner_area"></div>
         </div>
         <div class="mdl-layout__tab-panel" id="impressionistic">
-          <section class="mdl-grid mdl-grid--no-spacing">
-            {{ range $i, $value := .Others }}
-              <div class="demo-card-wide mdl-card card-margin mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                  <h2 class="mdl-card__title-text">{{ $value.Date }}</h2>
-                </div>
-                <div class="flex-grow">{{ $value.Title|safehtml }}</div>
-              </div>            
-            {{ end }}
-          </section>
+          <div class="center" id="impressionistic_progress">
+            <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+          </div>
+          <div id="impressionistic_area"></div>
         </div>
 
         <footer class="mdl-mega-footer">
@@ -120,7 +92,9 @@
         </footer>
       </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="/js/index.min.js"></script>
   </body>
 </html>
