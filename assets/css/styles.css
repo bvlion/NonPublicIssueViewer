@@ -303,3 +303,13 @@ pre {
   padding: 0 18px;
   margin: 0;
 }
+
+.month-list {
+  height: auto !important;
+  background-color: unset;
+  padding: 10px 20px !important;
+}
+
+.month-link {
+  margin-left: 16px;
+}
