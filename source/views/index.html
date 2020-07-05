@@ -29,7 +29,11 @@
         </div>
       </header>
       <main class="mdl-layout__content">
-
+        <div class="mdl-layout__tab-bar month-list">
+          {{ range $i, $value := .Months }}
+            <a href="javascript:load_message({{ $i }})" class="month-link">{{ $value }}</a>
+          {{ end }}
+        </div>
         <div class="mdl-layout__tab-panel is-active" id="diary-dates">
           <section class="section--center mdl-grid mdl-grid--no-spacing">
             <div class="mdl-cell mdl-cell--12-col">

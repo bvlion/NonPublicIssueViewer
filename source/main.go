@@ -32,6 +32,7 @@ type LoginParams struct {
 type IndexData struct {
   Footer map[string] string
   Dates []DateList
+  Months []string
 }
 
 type DateList struct {
@@ -100,6 +101,7 @@ func main() {
     t := time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60))
     month := ""
     dates := []DateList{}
+    months := []string{}
     for {
       key := ""
       ymd := t.Format(dateFormat)
@@ -107,6 +109,7 @@ func main() {
       if month != ym {
         month = ym
         key = month
+        months = append(months, ym)
       }
       dates = append(dates, DateList { Title: key, Date: ymd, Key: t.Format("200601") })
       if ymd == startDate {
@@ -118,6 +121,7 @@ func main() {
     data := IndexData {
       Footer: utils.Yaml().FooterLinks,
       Dates: dates,
+      Months: months,
     }
 
     return e.Render(http.StatusOK, "index.html", data)

@@ -78,6 +78,7 @@ const load_one_data = (date) => {
 }
 
 const load_message = (minusMonth) => {
+  set_meal_html(null)
   fetch('/issues/' + minusMonth, {
     method: 'GET',
     headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}
@@ -103,14 +104,25 @@ const load_message = (minusMonth) => {
 }
 
 const set_meal_html = (json) => {
-  document.querySelector('#breakfast_progress').style.display = 'none'
-  document.querySelector('#breakfast_area').innerHTML = create_meal_html(json.Breakfasts)
-  document.querySelector('#lunch_progress').style.display = 'none'
-  document.querySelector('#lunch_area').innerHTML = create_meal_html(json.Lunchs)
-  document.querySelector('#dinner_progress').style.display = 'none'
-  document.querySelector('#dinner_area').innerHTML = create_meal_html(json.Dinners)
-  document.querySelector('#impressionistic_progress').style.display = 'none'
-  document.querySelector('#impressionistic_area').innerHTML = create_meal_html(json.Others)
+  if (json == null) {
+    document.querySelector('#breakfast_progress').style.display = 'block'
+    document.querySelector('#breakfast_area').innerHTML = ''
+    document.querySelector('#lunch_progress').style.display = 'block'
+    document.querySelector('#lunch_area').innerHTML = ''
+    document.querySelector('#dinner_progress').style.display = 'block'
+    document.querySelector('#dinner_area').innerHTML = ''
+    document.querySelector('#impressionistic_progress').style.display = 'block'
+    document.querySelector('#impressionistic_area').innerHTML = ''
+  } else {
+    document.querySelector('#breakfast_progress').style.display = 'none'
+    document.querySelector('#breakfast_area').innerHTML = create_meal_html(json.Breakfasts)
+    document.querySelector('#lunch_progress').style.display = 'none'
+    document.querySelector('#lunch_area').innerHTML = create_meal_html(json.Lunchs)
+    document.querySelector('#dinner_progress').style.display = 'none'
+    document.querySelector('#dinner_area').innerHTML = create_meal_html(json.Dinners)
+    document.querySelector('#impressionistic_progress').style.display = 'none'
+    document.querySelector('#impressionistic_area').innerHTML = create_meal_html(json.Others)
+  }
   load_image()
 } 
 
