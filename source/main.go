@@ -66,7 +66,7 @@ func main() {
     "safehtml": func(text string) template.HTML { return template.HTML(text) },
   }
   t := &Template{
-    templates: template.Must(template.New("").Funcs(funcMap).ParseGlob("views/*.html")),
+    templates: template.Must(template.New("").Funcs(funcMap).ParseGlob("web/template/*.html")),
   }
 
   e := echo.New()
@@ -92,9 +92,9 @@ func main() {
   store.MaxAge(86400)
   e.Use(session.Sessions("ESESSION", store))
 
-  e.Static("/css", "./public/css")
-  e.Static("/js", "./public/js")
-  e.Static("/images", "./public/images")
+  e.Static("/css", "./web/static/css")
+  e.Static("/js", "./web/static/js")
+  e.Static("/images", "./web/static/images")
 
   e.GET("/", func (e echo.Context) error {
 

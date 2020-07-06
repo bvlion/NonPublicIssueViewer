@@ -1,9 +1,9 @@
 pkg
 assets/node_modules
-source/public/images/bg.jpg
-source/public/images/404.jpg
+source/web/static/images/bg.jpg
+source/web/static/images/404.jpg
 source/secret.yaml
 source/source
-source/public/js
-source/public/css
+source/web/static/js
+source/web/static/css
 source/google-services.json

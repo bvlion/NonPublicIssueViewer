@@ -57,8 +57,8 @@ jobs:
 
     - name: Set external file
       run: |
-        curl -o source/public/images/bg.jpg ${{ secrets.BG_URL }}
-        curl -o source/public/images/404.jpg ${{ secrets.NOT_FOUND_URL }}
+        curl -o source/web/static/images/bg.jpg ${{ secrets.BG_URL }}
+        curl -o source/web/static/images/404.jpg ${{ secrets.NOT_FOUND_URL }}
 
     - name: Set secret.yaml
       run: echo "${{ secrets.SECRET_YAML_BASE64 }}" | base64 -d > source/secret.yaml
