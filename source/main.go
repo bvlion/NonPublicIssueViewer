@@ -52,6 +52,13 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
   return t.templates.ExecuteTemplate(w, name, data)
 }
 
+func isNotLogined(e echo.Context) bool {
+  session := session.Default(e)
+  logined := session.Get(sessionName)
+
+  return logined != "true"
+}
+
 func main() {
   log.LogSetUp()
 
@@ -90,10 +97,8 @@ func main() {
   e.Static("/images", "./public/images")
 
   e.GET("/", func (e echo.Context) error {
-    session := session.Default(e)
-    logined := session.Get(sessionName)
 
-    if logined != "true" {
+    if isNotLogined(e) {
       return e.Redirect(http.StatusFound, "/login")
     }
 
@@ -128,6 +133,12 @@ func main() {
   })
 
   e.GET("/detail/:year/:month/:day", func (e echo.Context) error {
+    if isNotLogined(e) {
+      return e.JSON(http.StatusOK, map [string] string {
+        "error": "login",
+      })
+    }
+
     title := e.Param("year") + "/" + e.Param("month") + "/" + e.Param("day")
     issues := utils.ReadOneIssue(
       utils.Yaml().GitHub.Token,
@@ -165,6 +176,12 @@ func main() {
   })
 
   e.GET("/issues/:minusMonth", func (e echo.Context) error {
+    if isNotLogined(e) {
+      return e.JSON(http.StatusOK, map [string] string {
+        "error": "login",
+      })
+    }
+
     minusMonth, _ := strconv.Atoi(e.Param("minusMonth"))
     issues := utils.ReadIssues(utils.Yaml().GitHub.Token, utils.Yaml().GitHub.User, utils.Yaml().GitHub.Project, minusMonth)
 
@@ -234,8 +251,20 @@ func main() {
           }
         }
         if otherMessageStart && v != "## その他感想的なもの" {
+          if strings.HasPrefix(v, "<img") {
             otherMessage += imgReplace.ReplaceAllString(v, "img class='lazyload' data-src")
             otherMessage += "<br>"
+          } else if strings.HasPrefix(v, "##") {
+            otherMessage += "\n#"
+            otherMessage += v
+          } else if strings.HasPrefix(v, "* ") || strings.HasPrefix(v, "- ") {
+            otherMessage += "\n"
+            otherMessage += v
+          } else if v != "" {
+            otherMessage += v
+            otherMessage += "<br>"
+          }
+          otherMessage += "\n"
         }
       }
 
@@ -269,13 +298,10 @@ func main() {
   })
 
   e.GET("/login", func (e echo.Context) error {
-    session := session.Default(e)
-    logined := session.Get(sessionName)
-
-    if logined == "true" {
-      return e.Redirect(http.StatusFound, "/")
+    if isNotLogined(e) {
+      return e.Render(http.StatusOK, "login.html", "")
     }
-    return e.Render(http.StatusOK, "login.html", "")
+    return e.Redirect(http.StatusFound, "/")
   })
 
   e.POST("/login", func (e echo.Context) error {

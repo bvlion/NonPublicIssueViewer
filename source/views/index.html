@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
-    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="description" content="日記です">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>Home Diary</title>
     <link rel="icon" href="/images/icon/favicon-256x256.png" sizes="256x256" type="image/png">
@@ -15,11 +15,13 @@
   <body class="mdl-diary mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
       <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
-        <div class="mdl-layout--large-screen-only mdl-layout__header-row"></div>
         <div class="mdl-layout__header-row">
-          <h3>日記</h3>
+          <span class="mdl-layout-title">日記</span>
+          <div class="mdl-layout-spacer"></div>
+          <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="javascript:logout()">ログアウト</a>
+          </nav>
         </div>
-        <div class="mdl-layout--large-screen-only mdl-layout__header-row"></div>
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
           <a href="#diary-dates" class="mdl-layout__tab is-active">一覧</a>
           <a href="#breakfast" class="mdl-layout__tab">朝食</a>

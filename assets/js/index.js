@@ -1,7 +1,7 @@
-const inViewport = (entries, _) => {
+const inViewport = (entries, _) =>
   entries.forEach(entry => {
 
-    if(entry.intersectionRatio > 0){
+    if (entry.intersectionRatio > 0) {
       const imgEl = entry.target
       imgEl.src = imgEl.dataset.src
 
@@ -11,8 +11,7 @@ const inViewport = (entries, _) => {
 
       io.unobserve(entry.target)
     }
-  });
-}
+  })
 
 const io = new IntersectionObserver(inViewport, {
   threshold: [0]
@@ -27,6 +26,8 @@ const check_login = (error, next) => {
       title: 'セッションが切れました',
       html: "ログイン画面に遷移します。<br>あらためてログインをお願いいたします。",
       icon: 'warning',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
       confirmButtonColor: '#33',
       confirmButtonText: 'OK'
     }).then((_) => {
@@ -52,15 +53,17 @@ const load_one_data = (date) => {
         .then(data => {
           Swal.hideLoading()
           Swal.close()
-          Swal.fire({
-              type: 'success',
-              title: data.title,
-              html: marked(data.body),
-              showConfirmButton: false,
-              showCancelButton: true,
-              cancelButtonText: '閉じる'
+          check_login(data.error, () => {
+            Swal.fire({
+                type: 'success',
+                title: data.title,
+                html: marked(data.body),
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: '閉じる'
+            })
+            load_image()
           })
-          load_image()
         })
         .catch(() => {
           Swal.hideLoading()
@@ -121,22 +124,40 @@ const set_meal_html = (json) => {
     document.querySelector('#dinner_progress').style.display = 'none'
     document.querySelector('#dinner_area').innerHTML = create_meal_html(json.Dinners)
     document.querySelector('#impressionistic_progress').style.display = 'none'
-    document.querySelector('#impressionistic_area').innerHTML = create_meal_html(json.Others)
+    document.querySelector('#impressionistic_area').innerHTML = create_meal_html(json.Others, true)
   }
   load_image()
 } 
 
-const create_meal_html = (meal) => '<section class="mdl-grid mdl-grid--no-spacing">' +
+const create_meal_html = (meal, isMark = false) => '<section class="mdl-grid mdl-grid--no-spacing">' +
   meal
-    .map(element =>
-      '<div class="demo-card-wide mdl-card card-margin mdl-shadow--2dp">' +
+    .map(element => {
+      let title = ''
+      if (isMark) {
+        title = marked(element.Title)
+      } else {
+        title = '<pre>' + element.Title + '</pre>'
+      }
+      return '<div class="demo-card-wide mdl-card card-margin mdl-shadow--2dp">' +
       '<div class="mdl-card__title">' +
       '<h2 class="mdl-card__title-text">' + element.Date + '</h2>' +
       '</div>' +
-      '<div class="flex-grow"><pre>' + element.Title + '</pre></div>' +
+      '<div class="flex-grow">' + title + '</div>' +
       element.Key +
       '</div>'
-    )
+    })
     .join() + '</section>'
+
+const logout = () =>
+  Swal.fire({
+    title: 'ログアウトしますか？',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'ログアウト'
+  }).then((result) => {
+    if (result.value) {
+      location.href = "/logout"
+    }
+  })
 
 load_message(0)

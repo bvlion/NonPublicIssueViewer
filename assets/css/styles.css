@@ -20,7 +20,7 @@ html, body {
   overflow: visible;
 }
 .mdl-diary .mdl-layout__tab-bar-container {
-  height: 64px;
+  height: 48px;
 }
 .mdl-diary .mdl-layout__tab-bar {
   padding: 0;
@@ -30,8 +30,8 @@ html, body {
   width: 100%;
 }
 .mdl-diary .mdl-layout__tab-bar .mdl-layout__tab {
-  height: 64px;
-  line-height: 64px;
+  height: 48px;
+  line-height: 48px;
 }
 .mdl-diary .mdl-layout__tab-bar .mdl-layout__tab.is-active::after {
   background-color: white;
