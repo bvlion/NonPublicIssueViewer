@@ -41,11 +41,17 @@ type DateList struct {
   Key string
 }
 
+type ContentsList struct {
+  Date string
+  Content string
+  Image string
+}
+
 type IssuesData struct {
-  Breakfasts []DateList
-  Lunchs []DateList
-  Dinners []DateList
-  Others []DateList
+  Breakfasts []ContentsList
+  Lunchs []ContentsList
+  Dinners []ContentsList
+  Others []ContentsList
 }
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
@@ -185,10 +191,10 @@ func main() {
     minusMonth, _ := strconv.Atoi(e.Param("minusMonth"))
     issues := utils.ReadIssues(utils.Yaml().GitHub.Token, utils.Yaml().GitHub.User, utils.Yaml().GitHub.Project, minusMonth)
 
-    breakfasts := []DateList{}
-    lunchs := []DateList{}
-    dinners := []DateList{}
-    others := []DateList{}
+    breakfasts := []ContentsList{}
+    lunchs := []ContentsList{}
+    dinners := []ContentsList{}
+    others := []ContentsList{}
 
     wdays := [...] string{ "日", "月", "火", "水", "木", "金", "土" }
 
@@ -281,10 +287,10 @@ func main() {
       date, _ := time.Parse(dateFormat, *s.Title)
       dateString := *s.Title + "（" + wdays[date.Weekday()] + "）"
 
-      breakfasts = append(breakfasts, DateList { Title: breakfastMessage, Date: dateString, Key: breakfastImage })
-      lunchs = append(lunchs, DateList { Title: lunchMessage, Date: dateString, Key: lunchImage })
-      dinners = append(dinners, DateList { Title: dinnerMessage, Date: dateString, Key: dinnerImage })
-      others = append(others, DateList { Title: otherMessage, Date: dateString, Key: "" })
+      breakfasts = append(breakfasts, ContentsList { Date: dateString, Content: breakfastMessage, Image: breakfastImage })
+      lunchs = append(lunchs, ContentsList { Date: dateString, Content: lunchMessage, Image: lunchImage })
+      dinners = append(dinners, ContentsList { Date: dateString, Content: dinnerMessage, Image: dinnerImage })
+      others = append(others, ContentsList { Date: dateString, Content: otherMessage, Image: "" })
     }
 
     data := IssuesData {

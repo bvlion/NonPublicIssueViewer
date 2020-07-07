@@ -134,16 +134,16 @@ const create_meal_html = (meal, isMark = false) => '<section class="mdl-grid mdl
     .map(element => {
       let title = ''
       if (isMark) {
-        title = marked(element.Title)
+        title = marked(element.Content)
       } else {
-        title = '<pre>' + element.Title + '</pre>'
+        title = '<pre>' + element.Content + '</pre>'
       }
       return '<div class="demo-card-wide mdl-card card-margin mdl-shadow--2dp">' +
       '<div class="mdl-card__title">' +
       '<h2 class="mdl-card__title-text">' + element.Date + '</h2>' +
       '</div>' +
       '<div class="flex-grow">' + title + '</div>' +
-      element.Key +
+      element.Image +
       '</div>'
     })
     .join() + '</section>'
