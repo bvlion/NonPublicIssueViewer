@@ -11,6 +11,7 @@ import (
   "github.com/ipfans/echo-session"
   "source/utils"
   "source/log"
+  "source/structs"
   "regexp"
   "strings"
   "strconv"
@@ -23,35 +24,6 @@ const monthFormat = "2006/01"
 
 type Template struct {
   templates *template.Template
-}
-
-type LoginParams struct {
-  Passphrase string `json:"passphrase"`
-}
-
-type IndexData struct {
-  Footer map[string] string
-  Dates []DateList
-  Months []string
-}
-
-type DateList struct {
-  Title string
-  Date string
-  Key string
-}
-
-type ContentsList struct {
-  Date string
-  Content string
-  Image string
-}
-
-type IssuesData struct {
-  Breakfasts []ContentsList
-  Lunchs []ContentsList
-  Dinners []ContentsList
-  Others []ContentsList
 }
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
@@ -111,7 +83,7 @@ func main() {
     // 日付一覧
     t := time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60))
     month := ""
-    dates := []DateList{}
+    dates := []structs.DateList{}
     months := []string{}
     for {
       key := ""
@@ -122,14 +94,14 @@ func main() {
         key = month
         months = append(months, ym)
       }
-      dates = append(dates, DateList { Title: key, Date: ymd, Key: t.Format("200601") })
+      dates = append(dates, structs.DateList { Title: key, Date: ymd, Key: t.Format("200601") })
       if ymd == startDate {
         break
       }
       t = t.AddDate(0, 0, -1)
     }
 
-    data := IndexData {
+    data := structs.IndexData {
       Footer: utils.Yaml().FooterLinks,
       Dates: dates,
       Months: months,
@@ -191,10 +163,10 @@ func main() {
     minusMonth, _ := strconv.Atoi(e.Param("minusMonth"))
     issues := utils.ReadIssues(utils.Yaml().GitHub.Token, utils.Yaml().GitHub.User, utils.Yaml().GitHub.Project, minusMonth)
 
-    breakfasts := []ContentsList{}
-    lunchs := []ContentsList{}
-    dinners := []ContentsList{}
-    others := []ContentsList{}
+    breakfasts := []structs.ContentsList{}
+    lunchs := []structs.ContentsList{}
+    dinners := []structs.ContentsList{}
+    others := []structs.ContentsList{}
 
     wdays := [...] string{ "日", "月", "火", "水", "木", "金", "土" }
 
@@ -287,13 +259,13 @@ func main() {
       date, _ := time.Parse(dateFormat, *s.Title)
       dateString := *s.Title + "（" + wdays[date.Weekday()] + "）"
 
-      breakfasts = append(breakfasts, ContentsList { Date: dateString, Content: breakfastMessage, Image: breakfastImage })
-      lunchs = append(lunchs, ContentsList { Date: dateString, Content: lunchMessage, Image: lunchImage })
-      dinners = append(dinners, ContentsList { Date: dateString, Content: dinnerMessage, Image: dinnerImage })
-      others = append(others, ContentsList { Date: dateString, Content: otherMessage, Image: "" })
+      breakfasts = append(breakfasts, structs.ContentsList { Date: dateString, Content: breakfastMessage, Image: breakfastImage })
+      lunchs = append(lunchs, structs.ContentsList { Date: dateString, Content: lunchMessage, Image: lunchImage })
+      dinners = append(dinners, structs.ContentsList { Date: dateString, Content: dinnerMessage, Image: dinnerImage })
+      others = append(others, structs.ContentsList { Date: dateString, Content: otherMessage, Image: "" })
     }
 
-    data := IssuesData {
+    data := structs.IssuesData {
       Breakfasts: breakfasts,
       Lunchs: lunchs,
       Dinners: dinners,
@@ -311,7 +283,7 @@ func main() {
   })
 
   e.POST("/login", func (e echo.Context) error {
-    post := new(LoginParams)
+    post := new(structs.LoginParams)
     if err := e.Bind(post); err != nil {
       return e.JSON(http.StatusOK, map[string] string { "error": err.Error() })
     }
