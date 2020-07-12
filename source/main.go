@@ -1,23 +1,24 @@
 package main
 
 import (
-  "html/template"
-  "net/http"
-  "io"
-  "os"
   "fmt"
-  "time"
-  "github.com/labstack/echo"
-  "github.com/ipfans/echo-session"
-  "source/utils"
+  "html/template"
+  "io"
+  "net/http"
+  "os"
+  "regexp"
   "source/log"
   "source/structs"
-  "regexp"
-  "strings"
+  "source/utils"
+  "source/web/app"
   "strconv"
+  "strings"
+  "time"
+
+  session "github.com/ipfans/echo-session"
+  "github.com/labstack/echo"
 )
 
-const sessionName = "logined"
 const startDate = "2020/05/13"
 const dateFormat = "2006/01/02"
 const monthFormat = "2006/01"
@@ -28,13 +29,6 @@ type Template struct {
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
   return t.templates.ExecuteTemplate(w, name, data)
-}
-
-func isNotLogined(e echo.Context) bool {
-  session := session.Default(e)
-  logined := session.Get(sessionName)
-
-  return logined != "true"
 }
 
 func main() {
@@ -60,7 +54,7 @@ func main() {
       if code == http.StatusNotFound {
         c.Render(code, "404.html", "")
       } else {
-        c.JSON(code, map[string] string { "error": err.Error() })
+        c.JSON(code, map[string]string{"error": err.Error()})
       }
     }
   }
@@ -74,14 +68,14 @@ func main() {
   e.Static("/js", "./web/static/js")
   e.Static("/images", "./web/static/images")
 
-  e.GET("/", func (e echo.Context) error {
+  e.GET("/", func(e echo.Context) error {
 
-    if isNotLogined(e) {
+    if utils.IsNotLogined(e) {
       return e.Redirect(http.StatusFound, "/login")
     }
 
     // 日付一覧
-    t := time.Now().In(time.FixedZone("Asia/Tokyo", 9 * 60 * 60))
+    t := time.Now().In(time.FixedZone("Asia/Tokyo", 9*60*60))
     month := ""
     dates := []structs.DateList{}
     months := []string{}
@@ -94,25 +88,25 @@ func main() {
         key = month
         months = append(months, ym)
       }
-      dates = append(dates, structs.DateList { Title: key, Date: ymd, Key: t.Format("200601") })
+      dates = append(dates, structs.DateList{Title: key, Date: ymd, Key: t.Format("200601")})
       if ymd == startDate {
         break
       }
       t = t.AddDate(0, 0, -1)
     }
 
-    data := structs.IndexData {
+    data := structs.IndexData{
       Footer: utils.Yaml().FooterLinks,
-      Dates: dates,
+      Dates:  dates,
       Months: months,
     }
 
     return e.Render(http.StatusOK, "index.html", data)
   })
 
-  e.GET("/detail/:year/:month/:day", func (e echo.Context) error {
-    if isNotLogined(e) {
-      return e.JSON(http.StatusOK, map [string] string {
+  e.GET("/detail/:year/:month/:day", func(e echo.Context) error {
+    if utils.IsNotLogined(e) {
+      return e.JSON(http.StatusOK, map[string]string{
         "error": "login",
       })
     }
@@ -147,15 +141,15 @@ func main() {
       }
     }
 
-    return e.JSON(http.StatusOK, map [string] string {
+    return e.JSON(http.StatusOK, map[string]string{
       "title": title,
-      "body": body,
+      "body":  body,
     })
   })
 
-  e.GET("/issues/:minusMonth", func (e echo.Context) error {
-    if isNotLogined(e) {
-      return e.JSON(http.StatusOK, map [string] string {
+  e.GET("/issues/:minusMonth", func(e echo.Context) error {
+    if utils.IsNotLogined(e) {
+      return e.JSON(http.StatusOK, map[string]string{
         "error": "login",
       })
     }
@@ -168,7 +162,7 @@ func main() {
     dinners := []structs.ContentsList{}
     others := []structs.ContentsList{}
 
-    wdays := [...] string{ "日", "月", "火", "水", "木", "金", "土" }
+    wdays := [...]string{"日", "月", "火", "水", "木", "金", "土"}
 
     imgReplace := regexp.MustCompile("img.*src")
 
@@ -259,55 +253,27 @@ func main() {
       date, _ := time.Parse(dateFormat, *s.Title)
       dateString := *s.Title + "（" + wdays[date.Weekday()] + "）"
 
-      breakfasts = append(breakfasts, structs.ContentsList { Date: dateString, Content: breakfastMessage, Image: breakfastImage })
-      lunchs = append(lunchs, structs.ContentsList { Date: dateString, Content: lunchMessage, Image: lunchImage })
-      dinners = append(dinners, structs.ContentsList { Date: dateString, Content: dinnerMessage, Image: dinnerImage })
-      others = append(others, structs.ContentsList { Date: dateString, Content: otherMessage, Image: "" })
+      breakfasts = append(breakfasts, structs.ContentsList{Date: dateString, Content: breakfastMessage, Image: breakfastImage})
+      lunchs = append(lunchs, structs.ContentsList{Date: dateString, Content: lunchMessage, Image: lunchImage})
+      dinners = append(dinners, structs.ContentsList{Date: dateString, Content: dinnerMessage, Image: dinnerImage})
+      others = append(others, structs.ContentsList{Date: dateString, Content: otherMessage, Image: ""})
     }
 
-    data := structs.IssuesData {
+    data := structs.IssuesData{
       Breakfasts: breakfasts,
-      Lunchs: lunchs,
-      Dinners: dinners,
-      Others: others,
+      Lunchs:     lunchs,
+      Dinners:    dinners,
+      Others:     others,
     }
-    
+
     return e.JSON(http.StatusOK, data)
   })
 
-  e.GET("/login", func (e echo.Context) error {
-    if isNotLogined(e) {
-      return e.Render(http.StatusOK, "login.html", "")
-    }
-    return e.Redirect(http.StatusFound, "/")
-  })
+  e.GET("/login", app.LoginView)
+  e.POST("/login", app.LoginPost)
+  e.GET("/logout", app.Logout)
 
-  e.POST("/login", func (e echo.Context) error {
-    post := new(structs.LoginParams)
-    if err := e.Bind(post); err != nil {
-      return e.JSON(http.StatusOK, map[string] string { "error": err.Error() })
-    }
-
-    errorVal := ""
-    if (post.Passphrase == utils.Yaml().Passphrase) {
-      session := session.Default(e)
-      session.Set(sessionName, "true")
-      session.Save()
-    } else {
-      errorVal = "合言葉が正しくありません(T_T)"
-    }
-    return e.JSON(http.StatusOK, map[string] string { "error": errorVal })
-  })
-
-  e.GET("/logout", func (e echo.Context) error {
-    session := session.Default(e)
-    session.Clear()
-    session.Save()
-
-    return e.Redirect(http.StatusFound, "/login")
-  })
-
-  e.GET("/create-issue", func (e echo.Context) error {
+  e.GET("/create-issue", func(e echo.Context) error {
     if e.Request().Header.Get("X-Appengine-Cron") != "true" {
       return e.Render(http.StatusNotFound, "404.html", "")
     }
