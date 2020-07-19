@@ -3,7 +3,6 @@ package app
 import (
   "net/http"
   "github.com/labstack/echo"
-  "github.com/ipfans/echo-session"
   "source/utils"
   "source/structs"
 )
@@ -23,9 +22,7 @@ func LoginPost(e echo.Context) error {
 
   errorVal := ""
   if (post.Passphrase == utils.Yaml().Passphrase) {
-    session := session.Default(e)
-    session.Set(utils.SessionName, "true")
-    session.Save()
+    utils.SessionSave(e)
   } else {
     errorVal = "合言葉が正しくありません(T_T)"
   }
@@ -33,9 +30,6 @@ func LoginPost(e echo.Context) error {
 }
 
 func Logout(e echo.Context) error {
-  session := session.Default(e)
-  session.Clear()
-  session.Save()
-  
+  utils.SessionDelete(e)
   return e.Redirect(http.StatusFound, "/login")
 }
