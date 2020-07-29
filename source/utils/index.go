@@ -128,10 +128,10 @@ func CreateIssueData(param string) structs.IssuesData {
       }
       if lunchMessageStart && v != "### 昼食" {
         if strings.HasPrefix(v, "<img") {
-          lunchImage += v
+          lunchImage += imgReplace.ReplaceAllString(v, "img class='lazyload' data-src")
           lunchImage += "\n"
         } else if v != "" {
-          lunchMessage += imgReplace.ReplaceAllString(v, "img class='lazyload' data-src")
+          lunchMessage += v
           lunchMessage += "\n"
         }
       }
